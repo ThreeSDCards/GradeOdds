@@ -30,132 +30,137 @@ namespace GradeOdds
 
         static void Main(string[] args)
         {
-            //<introductie>
-            Console.Clear();
-            Console.WriteLine("Ten eerste wil ik u bedanken voor het testen van dit programma.");
-            Console.WriteLine("Het heeft erg veel moeite gekost om alles aan de praat te krijgen,");        
-            Console.WriteLine("maar gelukkig resulteert het wel in een functionerend programma.");
-            Console.WriteLine("");
-            Console.WriteLine("Dit programma is maar een proof of concept, gemikt maar naar een handvol");
-            Console.WriteLine("individuen om te testen of alles werkt. Later zal het system overgezet worden");
-            Console.WriteLine("Naar een openbaar beschikbare webapplicatie.");
-            Console.WriteLine("");
-            Console.WriteLine("Geschreven door Tobias Draisma op 13-5-2019");
-
-            for (int x = 0; x < 2; x++)
-            {
+            
+                //<introductie>
+                Console.Clear();
+                Console.WriteLine("Ten eerste wil ik u bedanken voor het testen van dit programma.");
+                Console.WriteLine("Het heeft erg veel moeite gekost om alles aan de praat te krijgen,");
+                Console.WriteLine("maar gelukkig resulteert het wel in een functionerend programma.");
                 Console.WriteLine("");
-            }
+                Console.WriteLine("Dit programma is maar een proof of concept, gemikt maar naar een handvol");
+                Console.WriteLine("individuen om te testen of alles werkt. Later zal het system overgezet worden");
+                Console.WriteLine("Naar een openbaar beschikbare webapplicatie.");
+                Console.WriteLine("");
+                Console.WriteLine("Geschreven door Tobias Draisma op 13-5-2019");
 
-            Console.WriteLine("Druk op enter om door te gaan.");
-            Console.ReadLine();
-            Console.Clear();
+                for (int x = 0; x < 2; x++)
+                {
+                    Console.WriteLine("");
+                }
+
+                Console.WriteLine("Druk op enter om door te gaan.");
+                Console.ReadLine();
+                Console.Clear();
             //</introductie>
 
-            //<Examen_Selectie>
-            bool s1 = false;
-            while (!s1)
+            while (true)
             {
-                printOpties();
-                if (int.TryParse(Console.ReadLine(), out invoer) & (invoer < 39) & (invoer > 0))        //Selectie-systeem voor het CE naar keuze.
+                //<Examen_Selectie>
+                bool s1 = false;
+                while (!s1)
                 {
-                    s1 = true;
+                    printOpties();
+                    if (int.TryParse(Console.ReadLine(), out invoer) & (invoer < 39) & (invoer > 0))        //Selectie-systeem voor het CE naar keuze.
+                    {
+                        s1 = true;
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine("De invoer is ongeldig. Probeer het opnieuw.");
+                    }
                 }
-                else
+                Console.Clear();
+                //</Examen_Selectie>
+
+                bool valid = false;
+                float beschikbaar = 0;  //De beschikbare hoeveelheid punten, default 0
+                float gehaald = 0;  //De gehaalde hoeveelheid punten, default 0
+                while (!valid)
                 {
-                    Console.Clear();
-                    Console.WriteLine("De invoer is ongeldig. Probeer het opnieuw.");
-                }
-            }
-            Console.Clear();
-            //</Examen_Selectie>
 
-            bool valid = false;
-            float beschikbaar = 0;  //De beschikbare hoeveelheid punten, default 0
-            float gehaald = 0;  //De gehaalde hoeveelheid punten, default 0
-            while (!valid)
-            {
-                
-                beschikbaar = KrijgBeschikbaar();   //Via subroutine wordt de beschikbare hoeveelheid punten gevraagd.
-                gehaald = krijgGehaald();   //Hetzelfde systeem voor de gehaalde hoeveelheid punten.
-                if (gehaald > beschikbaar)      //Herhaal indien de invoerwaarde onlogisch is.
+                    beschikbaar = KrijgBeschikbaar();   //Via subroutine wordt de beschikbare hoeveelheid punten gevraagd.
+                    gehaald = krijgGehaald();   //Hetzelfde systeem voor de gehaalde hoeveelheid punten.
+                    if (gehaald > beschikbaar)      //Herhaal indien de invoerwaarde onlogisch is.
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Het gehaalde hoeveelheid punten is hoger dan de mogelijk haalbare hoeveelheid punten;");
+                        Console.WriteLine("geef de invoer AUB opnieuw.");
+                    }
+                    else
+                    {
+                        valid = true;
+                    }
+                }
+
+                float precijfer = (gehaald / beschikbaar) * 9; //Cijfer zonder n-term wordt berekend en opgeslagen als precijfer.
+                precijfer = (float)Math.Round(precijfer, 1);    //Cijfer wordt afgerond. 
+
+
+                float minimum;
+                minNTerm(precijfer, out minimum);       //Minimale n-term wordt berekend.
+                minimum = (float)Math.Round(minimum, 1);        //en afgerond.
+                Console.WriteLine("Uw gehaalde cijfer (zonder N term) is " + precijfer + ".");
+                Console.WriteLine("Dit wilt zeggen dat u een minimum N term nodig heeft van " + minimum + ".");
+
+                switch (invoer)     //Vakspecifieke berekeningen worden gedaan aan de hand van het geslecteerde CE.
                 {
-                    Console.Clear();
-                    Console.WriteLine("Het gehaalde hoeveelheid punten is hoger dan de mogelijk haalbare hoeveelheid punten;");
-                    Console.WriteLine("geef de invoer AUB opnieuw.");
+                    case 13:
+                        kans = KrijgKans(HavoAK, minimum);
+                        break;
+                    case 14:
+                        kans = KrijgKans(HavoBI, minimum);
+                        break;
+                    case 15:
+                        kans = KrijgKans(HavoDU, minimum);
+                        break;
+                    case 16:
+                        kans = KrijgKans(HavoEC, minimum);
+                        break;
+                    case 17:
+                        kans = KrijgKans(HavoEN, minimum);
+                        break;
+                    case 18:
+                        kans = KrijgKans(HavoFR, minimum);
+                        break;
+                    case 19:
+                        kans = KrijgKans(HavoGS, minimum);
+                        break;
+                    case 20:
+                        kans = KrijgKans(HavoKA, minimum);
+                        break;
+                    case 21:
+                        kans = KrijgKans(HavoNA, minimum);
+                        break;
+                    case 22:
+                        kans = KrijgKans(HavoNL, minimum);
+                        break;
+                    case 23:
+                        kans = KrijgKans(HavoSK, minimum);
+                        break;
+                    case 24:
+                        kans = KrijgKans(HavoWA, minimum);
+                        break;
+                    case 25:
+                        kans = KrijgKans(HavoWB, minimum);
+                        break;
+
+
+                    default:
+                        Console.Clear();
+                        Console.WriteLine("Invoer is gesteld op een invalide waarde. Het programma gaat nu afsluiten."); // Indien een examen wordt gekozen dat nog niet verwerkt is in het programma.
+                        Console.ReadLine();
+                        Environment.Exit(1);
+                        break;
+
                 }
-                else {
-                    valid = true;
-                }
+
+
+                Console.WriteLine("De kans dat de N term deze waarde of hoger zal hebben is " + kans + "%"); //Uitlezing van resultaten.
+                Console.ReadLine();
+                Console.Clear();
+
             }
-
-            float precijfer = (gehaald / beschikbaar) * 9; //Cijfer zonder n-term wordt berekend en opgeslagen als precijfer.
-            precijfer = (float)Math.Round(precijfer, 1);    //Cijfer wordt afgerond. 
-            
-
-            float minimum;
-            minNTerm(precijfer, out minimum);       //Minimale n-term wordt berekend.
-            minimum = (float)Math.Round(minimum, 1);        //en afgerond.
-            Console.WriteLine("Uw gehaalde cijfer (zonder N term) is " + precijfer + ".");
-            Console.WriteLine("Dit wilt zeggen dat u een minimum N term nodig heeft van " + minimum + ".");
-
-            switch (invoer)     //Vakspecifieke berekeningen worden gedaan aan de hand van het geslecteerde CE.
-            {
-                case 13:
-                    kans = KrijgKans(HavoAK, minimum);
-                    break;
-                case 14:
-                    kans = KrijgKans(HavoBI, minimum);
-                    break;
-                case 15:
-                    kans = KrijgKans(HavoDU, minimum);
-                    break;
-                case 16:
-                    kans = KrijgKans(HavoEC, minimum);
-                    break;
-                case 17:
-                    kans = KrijgKans(HavoEN, minimum);
-                    break;
-                case 18:
-                    kans = KrijgKans(HavoFR, minimum);
-                    break;
-                case 19:
-                    kans = KrijgKans(HavoGS, minimum);
-                    break;
-                case 20:
-                    kans = KrijgKans(HavoKA, minimum);
-                    break;
-                case 21:
-                    kans = KrijgKans(HavoNA, minimum);
-                    break;
-                case 22:
-                    kans = KrijgKans(HavoNL, minimum);
-                    break;
-                case 23:
-                    kans = KrijgKans(HavoSK, minimum);
-                    break;
-                case 24:
-                    kans = KrijgKans(HavoWA, minimum);
-                    break;
-                case 25:
-                    kans = KrijgKans(HavoWB, minimum);
-                    break;
-
-
-                default:
-                    Console.Clear();
-                    Console.WriteLine("Invoer is gesteld op een invalide waarde. Het programma gaat nu afsluiten."); // Indien een examen wordt gekozen dat nog niet verwerkt is in het programma.
-                    Console.ReadLine();
-                    Environment.Exit(1);
-                    break;
-                
-            }
-
-            
-            Console.WriteLine("De kans dat de N term deze waarde of hoger zal hebben is " + kans +"%"); //Uitlezing van resultaten.
-            Console.ReadLine();
-            
-
         }
 
         static float KrijgBeschikbaar()
