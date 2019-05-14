@@ -13,7 +13,7 @@ namespace GradeOdds
 
         const float PASSINGGRADE = 5.5F;
         static float kans = 0;
-        static float[] HavoDU = { 0.615F, 0.22661F };
+        static float[] HavoDU = { 0.615F, 0.22661F };       //De gemiddelde n-termen als [0] en de variatie als [1]
         static float[] HavoWA = { 1.31667F, 0.03424F };
         static float[] HavoEN = { 0.66F, 0.21937F };
         static float[] HavoGS = { 1.17333F, 0.08638F };
@@ -30,9 +30,10 @@ namespace GradeOdds
 
         static void Main(string[] args)
         {
+            //<introductie>
             Console.Clear();
             Console.WriteLine("Ten eerste wil ik u bedanken voor het testen van dit programma.");
-            Console.WriteLine("Het heeft erg veel moeite gekost om alles aan de praat te krijgen,");
+            Console.WriteLine("Het heeft erg veel moeite gekost om alles aan de praat te krijgen,");        
             Console.WriteLine("maar gelukkig resulteert het wel in een functionerend programma.");
             Console.WriteLine("");
             Console.WriteLine("Dit programma is maar een proof of concept, gemikt maar naar een handvol");
@@ -49,13 +50,14 @@ namespace GradeOdds
             Console.WriteLine("Druk op enter om door te gaan.");
             Console.ReadLine();
             Console.Clear();
+            //</introductie>
 
             //<Examen_Selectie>
             bool s1 = false;
             while (!s1)
             {
                 printOpties();
-                if (int.TryParse(Console.ReadLine(), out invoer) & (invoer < 39) & (invoer > 0))
+                if (int.TryParse(Console.ReadLine(), out invoer) & (invoer < 39) & (invoer > 0))        //Selectie-systeem voor het CE naar keuze.
                 {
                     s1 = true;
                 }
@@ -69,14 +71,14 @@ namespace GradeOdds
             //</Examen_Selectie>
 
             bool valid = false;
-            float beschikbaar = 0;
-            float gehaald = 0;
+            float beschikbaar = 0;  //De beschikbare hoeveelheid punten, default 0
+            float gehaald = 0;  //De gehaalde hoeveelheid punten, default 0
             while (!valid)
             {
                 
-                beschikbaar = KrijgBeschikbaar();
-                gehaald = krijgGehaald();
-                if (gehaald > beschikbaar)
+                beschikbaar = KrijgBeschikbaar();   //Via subroutine wordt de beschikbare hoeveelheid punten gevraagd.
+                gehaald = krijgGehaald();   //Hetzelfde systeem voor de gehaalde hoeveelheid punten.
+                if (gehaald > beschikbaar)      //Herhaal indien de invoerwaarde onlogisch is.
                 {
                     Console.Clear();
                     Console.WriteLine("Het gehaalde hoeveelheid punten is hoger dan de mogelijk haalbare hoeveelheid punten;");
@@ -87,17 +89,17 @@ namespace GradeOdds
                 }
             }
 
-            float precijfer = (gehaald / beschikbaar) * 9;
-            precijfer = (float)Math.Round(precijfer, 1);
+            float precijfer = (gehaald / beschikbaar) * 9; //Cijfer zonder n-term wordt berekend en opgeslagen als precijfer.
+            precijfer = (float)Math.Round(precijfer, 1);    //Cijfer wordt afgerond. 
             
 
             float minimum;
-            minNTerm(precijfer, out minimum);
-            minimum = (float)Math.Round(minimum, 1);
+            minNTerm(precijfer, out minimum);       //Minimale n-term wordt berekend.
+            minimum = (float)Math.Round(minimum, 1);        //en afgerond.
             Console.WriteLine("Uw gehaalde cijfer (zonder N term) is " + precijfer + ".");
             Console.WriteLine("Dit wilt zeggen dat u een minimum N term nodig heeft van " + minimum + ".");
 
-            switch (invoer)
+            switch (invoer)     //Vakspecifieke berekeningen worden gedaan aan de hand van het geslecteerde CE.
             {
                 case 13:
                     kans = KrijgKans(HavoAK, minimum);
@@ -142,7 +144,7 @@ namespace GradeOdds
 
                 default:
                     Console.Clear();
-                    Console.WriteLine("Invoer is gesteld op een invalide waarde. Het programma gaat nu afsluiten.");
+                    Console.WriteLine("Invoer is gesteld op een invalide waarde. Het programma gaat nu afsluiten."); // Indien een examen wordt gekozen dat nog niet verwerkt is in het programma.
                     Console.ReadLine();
                     Environment.Exit(1);
                     break;
@@ -150,7 +152,7 @@ namespace GradeOdds
             }
 
             
-            Console.WriteLine("De kans dat de N term deze waarde of hoger zal hebben is " + kans +"%");
+            Console.WriteLine("De kans dat de N term deze waarde of hoger zal hebben is " + kans +"%"); //Uitlezing van resultaten.
             Console.ReadLine();
             
 
